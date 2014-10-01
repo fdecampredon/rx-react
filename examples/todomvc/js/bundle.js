@@ -527,77 +527,79 @@ function initComponent(comp, spec) {
         });
     }
 
-    var api = {
+    if (spec.init) {
+        var api = {
         
-        lifecycle: Object.keys(comp.__lifecycle).reduce(function (lifecycle, prop) {
-            if (prop !== 'componentWillUnmount') {
-                lifecycle[prop] = comp.__lifecycle[prop].takeUntil(comp.__lifecycle.componentWillUnmount);
-            } else {
-                lifecycle[prop] = comp.__lifecycle[prop].take(1);
-            }
-            return lifecycle;
-        }, {}),
-        
-        get state() {
-          return comp.state;  
-        },
-        
-        get props() {
-          return comp.props;  
-        },
-
-        setState: function (state, callback) {
-            comp.setState(state, callback);
-        },
-        replaceState: function (state, callback) {
-            comp.replaceState(state, callback);
-        },
-        forceUpdate: function () {
-            comp.forceUpdate();
-        },
-        getDOMNode: function () {
-            return comp.getDOMNode();
-        },
-        isMounted: function () {
-            return comp.isMounted();
-        },
-        transferPropsTo: function(target) {
-            return comp.transferPropsTo(target);
-        },
-        setProps: function (props, callback) {
-            comp.setProps(props, callback);
-        },
-        replaceProps: function (props, callback) {
-            comp.replaceProps(props, callback);
-        }, 
-
-        getRef: function (ref) {
-            return comp.refs[ref];
-        },
-
-        event: function (event, selector) {
-            if (comp.isMounted()) {
-                //todo error
-            }
-            var events = comp.__events || (comp.__events = {});
-            var registredEvents =  events[selector] || (events[selector] = {});
-            var observers = registredEvents[event] || (registredEvents[event] = []);
-            return Rx.Observable.create(function (observer) {
-                if (!selector) {
-                    selector = '';
+            lifecycle: Object.keys(comp.__lifecycle).reduce(function (lifecycle, prop) {
+                if (prop !== 'componentWillUnmount') {
+                    lifecycle[prop] = comp.__lifecycle[prop].takeUntil(comp.__lifecycle.componentWillUnmount);
+                } else {
+                    lifecycle[prop] = comp.__lifecycle[prop].take(1);
                 }
-                observers.push(observer);
-                return Rx.Disposable.create(function () {
-                    var index = observers.indexOf(observer);
-                    if (index !== -1) {
-                        observers.splice(index, 1);
-                    }
-                });
-            }).takeUntil(comp.__lifecycle.componentWillUnmount);
-        }
-    };
+                return lifecycle;
+            }, {}),
 
-    if (spec.init) spec.init(api);
+            get state() {
+              return comp.state;  
+            },
+
+            get props() {
+              return comp.props;  
+            },
+
+            setState: function (state, callback) {
+                comp.setState(state, callback);
+            },
+            replaceState: function (state, callback) {
+                comp.replaceState(state, callback);
+            },
+            forceUpdate: function () {
+                comp.forceUpdate();
+            },
+            getDOMNode: function () {
+                return comp.getDOMNode();
+            },
+            isMounted: function () {
+                return comp.isMounted();
+            },
+            transferPropsTo: function(target) {
+                return comp.transferPropsTo(target);
+            },
+            setProps: function (props, callback) {
+                comp.setProps(props, callback);
+            },
+            replaceProps: function (props, callback) {
+                comp.replaceProps(props, callback);
+            }, 
+
+            getRef: function (ref) {
+                return comp.refs[ref];
+            },
+
+            event: function (event, selector) {
+                if (comp.isMounted()) {
+                    //todo error
+                }
+                var events = comp.__events || (comp.__events = {});
+                var registredEvents =  events[selector] || (events[selector] = {});
+                var observers = registredEvents[event] || (registredEvents[event] = []);
+                return Rx.Observable.create(function (observer) {
+                    if (!selector) {
+                        selector = '';
+                    }
+                    observers.push(observer);
+                    return Rx.Disposable.create(function () {
+                        var index = observers.indexOf(observer);
+                        if (index !== -1) {
+                            observers.splice(index, 1);
+                        }
+                    });
+                }).takeUntil(comp.__lifecycle.componentWillUnmount);
+            }
+        };
+
+        spec.init(api);
+    }
 
     return state || {};
 }
@@ -696,7 +698,15 @@ module.exports = function createComponent(spec) {
     };
     
     if (spec.shouldComponentUpdate) {
-        reactSpec.shouldComponentUpdate = spec.shouldComponentUpdate;
+        reactSpec.shouldComponentUpdate = function (nextProps, nextState) {
+            return spec.shouldComponentUpdate({
+                props: this.props,
+                state: this.state
+            }, {
+                nextProps: nextProps,
+                nextState: nextState
+            });
+        };
     } else if (!spec.mixins ||
                !spec.mixins.some(function(mixin) { 
                    return typeof mixin.shouldComponentUpdate === 'function'; 
@@ -722,11 +732,15 @@ var update  = React.addons.update;
 
 
 function deepFreeze(object) {
-    if (object && typeof object === "object" && !Object.isFrozen(object)) {
-        Object.freeze(object);
+    if ( typeof object === "object") {
+        if (object && !Object.isFrozen(object)) {
+            Object.freeze(object);
+        }
+        Object.keys(object).forEach(function (key) {
+            deepFreeze(object[key]);
+        });
+        return object;
     }
-    Object.keys(object).forEach(deepFreeze);
-    return object;
 }
 
 
@@ -756,9 +770,9 @@ function create(initialValue) {
         var oldValue = operationsMap[uid].oldValue;
         var index = operationsStack.indexOf(uid);
         
-        value = operationsStack.slice(index + 1).reduce(function (value, descriptor) {
+        value = deepFreeze(operationsStack.slice(index + 1).reduce(function (value, descriptor) {
             return update(value, descriptor.operation);
-        }, oldValue);
+        }, oldValue));
         operationsStack.splice(index, 1);
         delete operationsMap[uid];
         notifyObservers();
@@ -799,7 +813,7 @@ function create(initialValue) {
         }
         
         var oldValue = value;
-        value = update(value, operation);
+        value = deepFreeze(update(value, operation));
         notifyObservers();
         
         
@@ -834,7 +848,7 @@ function create(initialValue) {
             return value;
         },
         set: function (val) {
-            value = val;
+            value = deepFreeze(val);
             notifyObservers();
         }
     });
