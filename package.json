@@ -1,0 +1,26 @@
+{
+  "name": "rx-react",
+  "version": "0.0.1",
+  "description": "React the Rx way",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-examples": "browserify -t reactify examples/todomvc/src/app.jsx -o examples/todomvc/js/bundle.js"
+  },
+  "keywords": [
+    "rx",
+    "rxjs",
+    "React"
+  ],
+  "author": "",
+  "license": "Apache License V2",
+  "peerDependencies": {
+    "react": "^0.11.2",
+    "rx": "^2.3.11"
+  },
+  "devDependencies": {
+    "browserify": "^5.12.1",
+    "director": "^1.2.3",
+    "reactify": "^0.14.0"
+  }
+}
