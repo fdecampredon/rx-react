@@ -4,7 +4,7 @@
   "description": "React the Rx way",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "tape test/*.js",
     "build-examples": "browserify -t reactify examples/todomvc/src/app.jsx -o examples/todomvc/js/bundle.js"
   },
   "keywords": [
@@ -21,6 +21,8 @@
   "devDependencies": {
     "browserify": "^5.12.1",
     "director": "^1.2.3",
-    "reactify": "^0.14.0"
+    "reactify": "^0.14.0",
+    "sinon": "^1.10.3",
+    "tape": "^3.0.0"
   }
 }
