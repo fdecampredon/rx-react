@@ -580,9 +580,9 @@ function initComponent(comp, spec) {
                 if (comp.isMounted()) {
                     //todo error
                 }
-                var events = comp.__events || (comp.__events = {});
-                var registredEvents =  events[selector] || (events[selector] = {});
-                var observers = registredEvents[event] || (registredEvents[event] = []);
+                var eventMap = comp.__eventMap || (comp.__eventMap = {});
+                var selectorToObservers =  eventMap[event] || (eventMap[event] = {});
+                var observers = selectorToObservers[selector] || (selectorToObservers[selector] = []);
                 return Rx.Observable.create(function (observer) {
                     if (!selector) {
                         selector = '';
@@ -615,44 +615,66 @@ function cleanComponent(comp) {
     }
 }
 
-function eventHandler(observers, event) {
-    observers.forEach(function (observer) {
-       observer.onNext(event); 
-    });
-}
-
 
 function getChildren(element) {
     var children = (element && element && element.props.children) || [];
     if(!Array.isArray(children)) {
-        children = [];
+        children = [children];
     }
     return children.filter(function (el) {
         return typeof el === 'object' && el;
     });
 }
 
-function getEventForElement(element, events) {
-    return Object.keys(events).filter(function (selector) {
-        return selectorMatches(selector, element);
-    }).reduce(function(result, selector) {
-        var selectorEvents = events[selector];
-        Object.keys(selectorEvents).forEach(function (event) {
-            result[event] = (result[event] || []).concat(selectorEvents[event]);
-        });
-        return result;
-    }, {});
+function eventHandler(selectorToObservers, event) {
+    Object.keys(selectorToObservers).reduce(function (observers, selector) {
+        return observers.concat(selectorToObservers[selector]);
+    }, []).forEach(function (observer) {
+       observer.onNext(event); 
+    });
 }
 
-function injectHandler(element, events) {
-    var compEvents = getEventForElement(element, events);
+
+function getEventHandler(eventName, selectorToObservers, comp) {
+    var cachedHandlers = comp.__eventHandlers || (comp.__eventHandlers = {});
+    var hash = eventName + Object.keys(selectorToObservers).join();
+    var cachedHandler = cachedHandlers[hash] || (cachedHandlers[hash] = function (event) {
+        eventHandler(selectorToObservers, event);
+    });
     
-    Object.keys(compEvents).forEach(function (event) {
-        element.props[event] = eventHandler.bind(undefined, compEvents[event]);
+    return cachedHandler;
+}
+
+function injectHandler(element, comp, isRoot) {
+    if (!comp.handlers) {
+        comp.handlers = {};
+    }
+    
+    var eventMap = comp.__eventMap;
+    
+    Object.keys(eventMap).forEach(function (eventName) {
+        var hasMatch = false;
+        var selectorToObservers = Object.keys(eventMap[eventName]).reduce(function (selectors, selector) {
+            if ( (!selector && isRoot) || selectorMatches(selector, element)) {
+                hasMatch = true;
+                selectors[selector] = eventMap[eventName][selector];
+            }
+            return selectors;
+        }, {});
+        
+        if (hasMatch) {
+            element.props[eventName] = getEventHandler(eventName, selectorToObservers, comp);
+            Object.defineProperty(element.props[eventName], '__isUsed', {
+                value: true,
+                enumerable: false,
+                writable: false,
+                configurable: true
+            });
+        }
     });
     
     getChildren(element).forEach(function(element) {
-        injectHandler(element, events);
+        injectHandler(element, comp);
     });
 }
 
@@ -689,10 +711,32 @@ module.exports = function createComponent(spec) {
         
         
         render: function () {
-            var result = render(this.props, this.state);
-            if (this.__events) {
-                injectHandler(result, this.__events);
+            var eventHandlers = this.__eventHandlers;
+            
+            if (eventHandlers) {
+                Object.keys(eventHandlers).forEach(function (hash) {
+                    Object.defineProperty(eventHandlers[hash], '__isUsed', {
+                        value: false,
+                        enumerable: false,
+                        writable: false,
+                        configurable: true
+                    });
+                });
             }
+            
+            var result = render(this.props, this.state);
+            if (this.__eventMap) {
+                injectHandler(result, this, true);
+            }
+            
+            if (eventHandlers) {
+                Object.keys(eventHandlers).forEach(function (hash) {
+                    if (!eventHandlers[hash].__isUsed) {
+                        delete eventHandlers[hash];
+                    }
+                });
+            }
+            
             return result;
         }
     };
@@ -732,15 +776,15 @@ var update  = React.addons.update;
 
 
 function deepFreeze(object) {
-    if ( typeof object === "object") {
-        if (object && !Object.isFrozen(object)) {
+    if (object && typeof object === "object") {
+        if (!Object.isFrozen(object)) {
             Object.freeze(object);
         }
         Object.keys(object).forEach(function (key) {
             deepFreeze(object[key]);
         });
-        return object;
     }
+    return object;
 }
 
 
