@@ -389,7 +389,7 @@ module.exports = {
                 title: title,
                 completed: false
             }]
-        }).validate();
+        }).confirm();
     },
     
     toggleAll: function (checked) {
@@ -397,7 +397,7 @@ module.exports = {
             return todos.map(function (todo) {
                 return Utils.extend({}, todo, { completed: checked });
             }); 
-        }).validate();
+        }).confirm();
     },
     
     toggle: function (todoToToggle) {
@@ -407,7 +407,7 @@ module.exports = {
                     todo :
                     Utils.extend({}, todo, {completed: !todo.completed});
             });
-        }).validate();
+        }).confirm();
     },
     
     destroy: function (todo) {
@@ -415,7 +415,7 @@ module.exports = {
             return todos.filter(function (candidate) {
                 return candidate !== todo;
             });
-        }).validate();
+        }).confirm();
     },
     
     save: function (todoToSave, text) {
@@ -423,7 +423,7 @@ module.exports = {
             return todos.map(function (todo) {
                 return todo !== todoToSave ? todo : Utils.extend({}, todo, {title: text});
             });
-        }).validate();
+        }).confirm();
     },
     
     clearCompleted: function () {
@@ -431,7 +431,7 @@ module.exports = {
             return todos.filter(function (todo) {
                 return !todo.completed;
             });
-        }).validate();
+        }).confirm();
     }
 };
 
@@ -588,12 +588,12 @@ function initComponent(comp, spec) {
                         selector = '';
                     }
                     observers.push(observer);
-                    return Rx.Disposable.create(function () {
+                    return function () {
                         var index = observers.indexOf(observer);
                         if (index !== -1) {
                             observers.splice(index, 1);
                         }
-                    });
+                    };
                 }).takeUntil(comp.__lifecycle.componentWillUnmount);
             }
         };
@@ -802,13 +802,13 @@ function create(initialValue) {
         });
     }
     
-    function operationAlreadyValidatedOrCanceled() {
-        throw new Error('the operation has already been validated or canceled');
+    function operationAlreadyConfirmdOrCanceled() {
+        throw new Error('the operation has already been confirmed or canceled');
     }
     
     function cancelOperation(uid) {
         if (!operationsMap.hasOwnProperty(uid)) {
-            operationAlreadyValidatedOrCanceled();
+            operationAlreadyConfirmdOrCanceled();
         }
         
         var oldValue = operationsMap[uid].oldValue;
@@ -822,14 +822,14 @@ function create(initialValue) {
         notifyObservers();
     }
     
-    function validateOperation(uid) {
+    function confirmOperation(uid) {
         if (!operationsMap.hasOwnProperty(uid)) {
-            operationAlreadyValidatedOrCanceled();
+            operationAlreadyConfirmdOrCanceled();
         }
-        operationsMap[uid].validated = true;
+        operationsMap[uid].confirmed = true;
         var lastIndex = -1;
         operationsStack.every(function (uid, index) {
-            if (operationsMap[uid].validated) {
+            if (operationsMap[uid].confirmed) {
                 delete operationsMap[uid];
                 lastIndex = index;
                 return true;
@@ -851,7 +851,7 @@ function create(initialValue) {
     
     var observable = Rx.Observable.create(subscribe);
     
-    function applyOperation(operation, validate) {
+    function applyOperation(operation, confirm) {
         if (typeof operation === 'function') {
             operation = { $apply: operation};
         }
@@ -867,20 +867,20 @@ function create(initialValue) {
             oldValue: oldValue
         };
         operationsStack.push(uid);
-        if (!validate) {
+        if (!confirm) {
             return {
                 cancel: function () { 
                     cancelOperation(uid); 
                 },
-                validate: function () { 
-                    validateOperation(uid);
+                confirm: function () { 
+                    confirmOperation(uid);
                 }
             };
         } else {
-            validateOperation(uid);
+            confirmOperation(uid);
             return { 
-                cancel: operationAlreadyValidatedOrCanceled,
-                validate: operationAlreadyValidatedOrCanceled
+                cancel: operationAlreadyConfirmdOrCanceled,
+                confirm: operationAlreadyConfirmdOrCanceled
             };
         }
     }

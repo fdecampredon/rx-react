@@ -25,7 +25,7 @@ module.exports = {
                 title: title,
                 completed: false
             }]
-        }).validate();
+        }).confirm();
     },
     
     toggleAll: function (checked) {
@@ -33,7 +33,7 @@ module.exports = {
             return todos.map(function (todo) {
                 return Utils.extend({}, todo, { completed: checked });
             }); 
-        }).validate();
+        }).confirm();
     },
     
     toggle: function (todoToToggle) {
@@ -43,7 +43,7 @@ module.exports = {
                     todo :
                     Utils.extend({}, todo, {completed: !todo.completed});
             });
-        }).validate();
+        }).confirm();
     },
     
     destroy: function (todo) {
@@ -51,7 +51,7 @@ module.exports = {
             return todos.filter(function (candidate) {
                 return candidate !== todo;
             });
-        }).validate();
+        }).confirm();
     },
     
     save: function (todoToSave, text) {
@@ -59,7 +59,7 @@ module.exports = {
             return todos.map(function (todo) {
                 return todo !== todoToSave ? todo : Utils.extend({}, todo, {title: text});
             });
-        }).validate();
+        }).confirm();
     },
     
     clearCompleted: function () {
@@ -67,6 +67,6 @@ module.exports = {
             return todos.filter(function (todo) {
                 return !todo.completed;
             });
-        }).validate();
+        }).confirm();
     }
 };
