@@ -814,7 +814,8 @@ function create(initialValue) {
         var oldValue = operationsMap[uid].oldValue;
         var index = operationsStack.indexOf(uid);
         
-        value = deepFreeze(operationsStack.slice(index + 1).reduce(function (value, descriptor) {
+        value = deepFreeze(operationsStack.slice(index + 1).reduce(function (value, uid) {
+            var descriptor = operationsMap[uid];
             return update(value, descriptor.operation);
         }, oldValue));
         operationsStack.splice(index, 1);
@@ -853,7 +854,7 @@ function create(initialValue) {
     
     function applyOperation(operation, confirm) {
         if (typeof operation === 'function') {
-            operation = { $apply: operation};
+            operation = { $apply: operation };
         }
         
         var oldValue = value;
