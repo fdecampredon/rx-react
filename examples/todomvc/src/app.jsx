@@ -55,7 +55,7 @@ var TodoApp = ReactRx.createComponent({
     },
     
     init: function(comp) {
-        comp.event('onKeyDown', '#new-todo')
+        comp.observableFromEvent('onKeyDown', '#new-todo')
         .filter(function (event) {
             return event.which === ENTER_KEY;
         })
@@ -73,33 +73,33 @@ var TodoApp = ReactRx.createComponent({
         });
         
         
-        comp.event('onChange', '#toggle-all').subscribe(function (event) {
+        comp.observableFromEvent('onChange', '#toggle-all').subscribe(function (event) {
             var checked = event.target.checked;
             TodoModel.toggleAll(checked);
         });
         
-        comp.event('onToggle', '.todoItem').subscribe(function (todo) {
+        comp.observableFromEvent('onToggle', '.todoItem').subscribe(function (todo) {
             TodoModel.toggle(todo);
         });
         
-        comp.event('onDestroy', '.todoItem').subscribe(function (todo) {
+        comp.observableFromEvent('onDestroy', '.todoItem').subscribe(function (todo) {
             TodoModel.destroy(todo);
         });
         
-        comp.event('onEdit', '.todoItem').subscribe(function (todo) {
+        comp.observableFromEvent('onEdit', '.todoItem').subscribe(function (todo) {
             comp.setState({editing: todo.id});
         });
         
-        comp.event('onSave', '.todoItem').subscribe(function (event) {
+        comp.observableFromEvent('onSave', '.todoItem').subscribe(function (event) {
             TodoModel.save(event.todo, event.text);
             comp.setState({editing: null});
         });
         
-        comp.event('onCancel', '.todoItem').subscribe(function () {
+        comp.observableFromEvent('onCancel', '.todoItem').subscribe(function () {
             comp.setState({editing: null});
         });
         
-        comp.event('onClearCompleted', '.footer').subscribe(function () {
+        comp.observableFromEvent('onClearCompleted', '.footer').subscribe(function () {
            TodoModel.clearCompleted(); 
         });
     },

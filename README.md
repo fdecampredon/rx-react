@@ -62,7 +62,7 @@ the component Object contains passed to `init` the following methods/properties 
 
 `ReactComponent getRef(String ref)`: return the react component correspondind to the `ref` passed as parameter, React [`refs`](http://facebook.github.io/react/docs/more-about-refs.html)
 
-`Observable event(String eventName, [String selector])`: Create an RxJS [`Observable`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/observable.md) sequence from an event, If no selector are provided the event is attached to the topLevel Element of the component.
+`Observable observableFromEvent((String eventName, [String selector])`: Create an RxJS [`Observable`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/observable.md) sequence from an event, If no selector are provided the event is attached to the topLevel Element of the component.
 
 - Observable cannot be created this way after that the component has been mounted.
 - event must correspond to an element property (`onClick`, `onKeyDown` etc..)

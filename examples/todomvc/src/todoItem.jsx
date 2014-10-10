@@ -22,11 +22,11 @@ var TodoItem = RxReact.createComponent({
     
     init: function (comp) {
         
-        comp.event('onChange', '.edit').subscribe(function (event) {
+        comp.observableFromEvent('onChange', '.edit').subscribe(function (event) {
             comp.setState({editText: event.target.value});
         });
         
-        comp.event('onKeyDown', '.edit')
+        comp.observableFromEvent('onKeyDown', '.edit')
         .filter(function (event) {
             if (event.which === ESCAPE_KEY) {
                 comp.setState({editText: comp.props.todo.title});
@@ -34,7 +34,7 @@ var TodoItem = RxReact.createComponent({
             } 
             return event.which === ENTER_KEY;
         })
-        .merge(comp.event('onBlur', '.edit'))
+        .merge(comp.observableFromEvent('onBlur', '.edit'))
         .subscribe(function () {
             var val = comp.state.editText.trim();
             if (val) {
@@ -46,7 +46,7 @@ var TodoItem = RxReact.createComponent({
             return false;
         });
         
-        comp.event('onDoubleClick', '.todoLabel').subscribe(function () {
+        comp.observableFromEvent('onDoubleClick', '.todoLabel').subscribe(function () {
             comp.props.onEdit(comp.props.todo);
             comp.setState({editText: comp.props.todo.title});
         });
