@@ -15,7 +15,7 @@
   "author": "",
   "license": "Apache License V2",
   "peerDependencies": {
-    "react": "^0.11.2",
+    "react": "^0.12.0",
     "rx": "^2.3.11"
   },
   "devDependencies": {
@@ -24,5 +24,6 @@
     "reactify": "^0.14.0",
     "sinon": "^1.10.3",
     "tape": "^3.0.0"
-  }
+  },
+  "dependencies": {}
 }
