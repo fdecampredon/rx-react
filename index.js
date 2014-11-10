@@ -1,9 +1,9 @@
 var Property        = require('./lib/property');
-var createComponent = require('./lib/createComponent');
+var createClass     = require('./lib/createClass');
 var Action          = require('./lib/action');
 
 module.exports = {
     Property: Property,
-    createComponent: createComponent,
+    createClass: createClass,
     Action: Action
 };
