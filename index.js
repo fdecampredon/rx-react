@@ -1,4 +1,4 @@
-
 module.exports = {
-    createClass: require('./lib/createClass')
+    createClass: require('./lib/createClass'),
+    renderToStringAsync: require('./lib/renderToStringAsync')
 };
