@@ -18,11 +18,13 @@
     "rx": "^2.3.11"
   },
   "devDependencies": {
+    "react": "^0.12.0",
+    "sinon": "^1.12.1",
     "tape": "^3.0.0"
   },
   "browser": {
-      "./lib/waitForStream.js": "./lib/waitForStream-browser.js",
-      "./index.js" : "./browser.js"
+    "./lib/waitForStream.js": "./lib/waitForStream-browser.js",
+    "./index.js": "./browser.js"
   },
   "dependencies": {}
 }
