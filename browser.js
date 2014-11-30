@@ -1,4 +1,5 @@
 module.exports = {
-  createClass: require('./lib/createClass'),
+  LifecycleMixin: require('./lib/lifecycleMixin'),
+  StateStreamMixin: require('./lib/stateStreamMixin'),
   EventHandler: require('./lib/eventHandler')
 };

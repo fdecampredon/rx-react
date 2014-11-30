@@ -1,5 +1,6 @@
 module.exports = {
-  createClass: require('./lib/createClass'),
-  renderToStringAsync: require('./lib/renderToStringAsync'),
-  EventHandler: require('./lib/eventHandler')
+  LifecycleMixin: require('./lib/lifecycleMixin'),
+  StateStreamMixin: require('./lib/stateStreamMixin'),
+  EventHandler: require('./lib/eventHandler'),
+  renderToStringAsync: require('./lib/renderToStringAsync')
 };
