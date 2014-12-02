@@ -1,6 +1,6 @@
 #RxReact
 
->  [ReactJS](http://facebook.github.io/react/) for [RxJS](https://github.com/Reactive-Extensions/RxJS)
+>  [ReactJS](http://facebook.github.io/react/) bindings for [RxJS](https://github.com/Reactive-Extensions/RxJS)
 
 
 #Installation
