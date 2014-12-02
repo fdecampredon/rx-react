@@ -1,0 +1,15 @@
+{
+  "name": "basic-state-stream",
+  "description": "Basic RxReact.StateStream example",
+  "main": "index.js",
+  "scripts": {
+    "build": "browserify --debug --transform reactify index.js > bundle.js"
+  },
+  "devDependencies": {
+    "react": "^0.12.1",
+    "reactify": "^0.17.1",
+    "rx": "^2.3.18",
+    "rx-dom": "^4.0.1",
+    "rx-react": "0.0.1"
+  }
+}
