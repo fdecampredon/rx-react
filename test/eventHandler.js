@@ -1,5 +1,5 @@
 var test = require('tape');
-var EventHandler = require('../lib/eventHandler');
+var EventHandler = require('../').EventHandler;
 var Rx = require('rx');
 
 test('EventHandler', function (t) {

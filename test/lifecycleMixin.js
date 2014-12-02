@@ -1,7 +1,7 @@
 var test                    = require('tape');
 var React                   = require('react');
 var ReactTestUtils          = require('react/lib/ReactTestUtils');
-var LifecycleMixin          = require('../lib/lifecycleMixin');
+var LifecycleMixin          = require('../').LifecycleMixin;
 var jsdom                   = require('jsdom').jsdom;
 var sinon                   = require('sinon');
 
