@@ -6,7 +6,7 @@ var jsdom                   = require('jsdom').jsdom;
 var sinon                   = require('sinon');
 
 
-test('lifecycleMixin', function (t) {
+test('LifecycleMixin', function (t) {
   
    
   var component;
