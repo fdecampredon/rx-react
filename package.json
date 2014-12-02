@@ -1,7 +1,7 @@
 {
   "name": "rx-react",
-  "version": "0.0.1",
-  "description": "React the Rx way",
+  "version": "0.1.0",
+  "description": "ReactJS bindings for RxJS",
   "main": "index.js",
   "scripts": {
     "test": "tape test/*.js"
@@ -9,12 +9,23 @@
   "keywords": [
     "rx",
     "rxjs",
-    "React"
+    "React",
+    "ReactJS"
   ],
-  "author": "",
-  "license": "Apache License V2",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/fdecampredon/rx-react.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fdecampredon/rx-react/issues"
+  },
+  "author": "François de Campredon <francois.de.campredon@gmail.com>",
+  "licenses" : {
+    "type": "Apache",
+    "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+  },
   "peerDependencies": {
-    "react": "^0.12.0",
+    "react": "~0.12.0",
     "rx": "^2.3.11"
   },
   "devDependencies": {
@@ -23,11 +34,12 @@
     "react": "^0.12.0",
     "reactify": "^0.17.1",
     "sinon": "^1.12.1",
-    "tape": "^3.0.0"
+    "tape": "^3.0.0",
+    "rx": "^2.3.11"
   },
   "browser": {
     "./lib/waitForStream.js": "./lib/waitForStream-browser.js",
-    "./index.js": "./browser.js"
+    "index.js": "browser.js"
   },
   "dependencies": {}
 }
