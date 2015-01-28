@@ -17,7 +17,10 @@ RxReact provides a set of utilities to work with RxJS and React :
 
 * The `StateStreamMixin`
 * The `LifecycleMixin`
-* The `EventHandler` helpers
+* The `PropsMixin`
+* The `ReactReact.Component` base class
+* The `FuncSubject` helpers
+
 
 
 ##StateStreamMixin
@@ -95,25 +98,84 @@ var Component = React.createClass({
 });
 ```
 
-##EventHandler
-The `EventHandler` helpers allows to create RxJS `Observable` that can be injected as callback for React event handler.
-To create an handler use the `create` function of `EventHandler`
+##PropsMixin
+
+The `PropsMixin` allows you to obtains a stream of props as RxJS `Observable` for your component.
+Example : 
 
 ```javascript
-var myHandler = EventHandler.create()
+var PropsMixin = require('rx-react').PropsMixin;
+var React = require('react');
+
+
+var Component = React.createClass({
+  mixins: [PropsMixin],
+  componentWillMount: function () {
+    this.propsStream.subscribe(function (props) {
+      console.log(props.message);
+    }
+  },
+  render: function() {
+    //...
+  }
+});
+
+var comp = React.render(<Component message='Hello World!' />, domNode); // log 'Hello World!'
+comp.setProps({message: 'Hello John'}); // log 'Hello John'
+```
+This is particulary useful in combinason with the StateStreamMixin when your component states depends on Props.
+
+
+##Component
+
+The `RxReact.Component` is a base class combining the behavior of all the mixin described above.
+It extends `React.Component`.
+
+Example: 
+
+```javascript
+var RxReact = require('rx-react');
+var Rx = require('rx');
+
+class MyComponent extends RxReact.component {
+  getStateStream() {
+    return Rx.Observable.interval(1000).map(function (interval) {
+      return {
+        secondsElapsed: interval
+      };
+    });
+  },
+  render() {
+    var secondsElapsed = this.state? this.state.secondsElapsed : 0;
+    return (
+      <div>Seconds Elapsed: {secondsElapsed}</div>
+    );
+  }
+}
+```
+Note that the getStateStream function is mandatory, and that when you extends lifecycle methods,
+You must call the `super` method.
+
+##FuncSubject
+
+The `FuncSubject` helpers allows to create RxJS `Observable` that can be injected as callback for React event handler, ref, etc...
+To create an handler use the `create` function of `FuncSubject`
+
+```javascript
+var myHandler = FuncSubject.create()
 ```
 
 Example: 
 
 ```javascript
-var EventHandler = require('rx-react').EventHandler;
+var FuncSubject = require('rx-react').FuncSubject;
 var React = require('react');
 var Rx = require('rx');
 
 
 var Button = React.createClass({
   componentWillMount: function () {
-    this.buttonClicked = EventHandler.create();
+    this.buttonClicked = FuncSubject.create();
     
     this.buttonClicked.subscribe(function (event) {
       alert('button clicked');
