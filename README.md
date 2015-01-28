@@ -46,7 +46,7 @@ var Timer = React.createClass({
     });
   },
   render: function () {
-    var secondsElapsed = this.state? this.state.secondsElapsed : 0;
+    var secondsElapsed = this.state ? this.state.secondsElapsed : 0;
     return (
       <div>Seconds Elapsed: {secondsElapsed}</div>
     );
