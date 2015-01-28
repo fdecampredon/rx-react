@@ -26,7 +26,7 @@ RxReact provides a set of utilities to work with RxJS and React :
 ##StateStreamMixin
 
 The `StateStreamMixin` allows to bind a component state to an RxJS `Observable` stream. 
-The way to achieve the binding is to provide a `getStateStream` method on your component that returns an RxJS `Observable`, the `StateStream` mixin will automaticly merge the state of your component with the values published by the returned observable. The subscription will be automaticly cleaned on component unmount.
+The way to achieve the binding is to provide a `getStateStream` method on your component that returns an RxJS `Observable`, the `StateStream` mixin will automatically merge the state of your component with the values published by the returned observable. The subscription will be automaticly cleaned on component unmount.
 
 Example: 
 
