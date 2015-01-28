@@ -18,8 +18,8 @@ RxReact provides a set of utilities to work with RxJS and React :
 * The `StateStreamMixin`
 * The `LifecycleMixin`
 * The `PropsMixin`
-* The `ReactReact.Component` base class
-* The `FuncSubject` helpers
+* The `RxReact.Component` base class
+* The `FuncSubject` helper
 
 
 
@@ -100,7 +100,7 @@ var Component = React.createClass({
 
 ##PropsMixin
 
-The `PropsMixin` allows you to obtains a stream of props as RxJS `Observable` for your component.
+The `PropsMixin` allows to obtain a stream of props as RxJS `Observable` for your component.
 Example : 
 
 ```javascript
@@ -123,28 +123,28 @@ var Component = React.createClass({
 var comp = React.render(<Component message='Hello World!' />, domNode); // log 'Hello World!'
 comp.setProps({message: 'Hello John'}); // log 'Hello John'
 ```
-This is particulary useful in combinason with the StateStreamMixin when your component states depends on Props.
+This is particulary useful in combination with the `StateStreamMixin` when your component states depends on Props.
 
 
 ##Component
 
 The `RxReact.Component` is a base class combining the behavior of all the mixin described above.
 It extends `React.Component`.
-
 Example: 
 
 ```javascript
 var RxReact = require('rx-react');
 var Rx = require('rx');
 
-class MyComponent extends RxReact.component {
+class MyComponent extends RxReact.Component {
   getStateStream() {
     return Rx.Observable.interval(1000).map(function (interval) {
       return {
         secondsElapsed: interval
       };
     });
-  },
+  }
+  
   render() {
     var secondsElapsed = this.state? this.state.secondsElapsed : 0;
     return (
@@ -153,12 +153,12 @@ class MyComponent extends RxReact.component {
   }
 }
 ```
-Note that the getStateStream function is mandatory, and that when you extends lifecycle methods,
+Note that the `getStateStream` function is mandatory, and that when you extend lifecycle methods,
 You must call the `super` method.
 
 ##FuncSubject
 
-The `FuncSubject` helpers allows to create RxJS `Observable` that can be injected as callback for React event handler, ref, etc...
+The `FuncSubject` helper allows to create an RxJS `Observable` that can be injected as callback for React event handlers, refs, etc...
 To create an handler use the `create` function of `FuncSubject`
 
 ```javascript
