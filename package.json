@@ -4,7 +4,7 @@
   "description": "ReactJS bindings for RxJS",
   "main": "index.js",
   "scripts": {
-    "test": "tape test/*.js"
+    "test": "tape test/testUtils.js test/*.js"
   },
   "keywords": [
     "rx",
