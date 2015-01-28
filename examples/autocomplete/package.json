@@ -3,13 +3,25 @@
   "description": "Basic RxReact.StateStream example",
   "main": "index.js",
   "scripts": {
-    "build": "browserify --debug --transform reactify index.js > bundle.js"
+    "build": "browserify --debug  index.js > bundle.js"
   },
   "devDependencies": {
-    "react": "^0.12.1",
+    "envify": "^3.2.0",
+    "react": "^0.13.beta.1",
     "reactify": "^0.17.1",
     "rx": "^2.3.18",
     "rx-dom": "^4.0.1",
-    "rx-react": "0.1.0"
+    "rx-react": "0.2.0-beta.1"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "reactify",
+        {
+          "es6": true
+        }
+      ],
+      "envify"
+    ]
   }
 }

@@ -1,8 +1,7 @@
+var testUtils               = require('./testUtils');
 var test                    = require('tape');
 var React                   = require('react');
-var ReactTestUtils          = require('react/lib/ReactTestUtils');
 var LifecycleMixin          = require('../').LifecycleMixin;
-var jsdom                   = require('jsdom').jsdom;
 var sinon                   = require('sinon');
 
 
@@ -39,10 +38,7 @@ test('LifecycleMixin', function (t) {
   }
   
   t.test('setup', function (t) {
-    var doc = global.document = jsdom();
-    global.window = doc.parentWindow;
-    component = React.createElement(Component);
-    component = ReactTestUtils.renderIntoDocument(component);
+    component = testUtils.render(React.createElement(Component));
     
     t.end();
   });
@@ -68,50 +64,46 @@ test('LifecycleMixin', function (t) {
     t.notOk(lifecycleSpies.componentWillUpdate.onNext.called, 'componentWillUpdate should not have been called yet');
     t.notOk(lifecycleSpies.componentDidUpdate.onNext.called, 'componentDidUpdate should not have been called yet');
     
-    var doc = global.document = jsdom();
-    global.window = doc.parentWindow;
-    
     var props = { prop: { foo: 'bar'} };
-    component.setProps(props, function () {
-      t.ok(lifecycleSpies.componentWillReceiveProps.onNext.calledWith(props), 'componentWillReceiveProps should have been called after setProps');
-      t.ok(lifecycleSpies.componentWillUpdate.onNext.called, 'componentWillUpdate should have been called after setProps');
-      
-      var componentWillUpdateParameter = lifecycleSpies.componentWillUpdate.onNext.getCall(0).args[0];
-      t.deepEquals(componentWillUpdateParameter.nextProps, props, 'the componentWillUpdate observable should emit { nextProps, nextState }');
-      t.equals(componentWillUpdateParameter.nextState, state, 'the componentWillUpdate observable should emit { nextProps, nextState }');
-      
-      t.ok(lifecycleSpies.componentDidUpdate.onNext.called, 'componentDidUpdate should have been called after setProps');
-      var componentDidUpdateParameter = lifecycleSpies.componentDidUpdate.onNext.getCall(0).args[0];
-      t.deepEquals(componentDidUpdateParameter.prevProps, {}, 'the componentDidUpdate observable should emit { prevProps, prevState }');
-      t.equals(componentDidUpdateParameter.prevState, state, 'the componentWillUpdate observable should emit { prevProps, prevState }');
-      
-      Object.keys(lifecycleSpies).forEach(function (key) {
-         t.notOk(lifecycleSpies[key].onComplete.called, 'onComplete for observable \''+ key + '\' should not have been called yet');
-      });
-      
-      t.notOk(lifecycleSpies.componentWillUnmount.onNext.called, 'componentWillUnmount should not have been called yet');
-      
-      component.unmountComponent();
-      
-      Object.keys(lifecycleSpies).forEach(function (key) {
-        t.ok(lifecycleSpies.componentWillUnmount.onNext.called, 'componentWillUnmount should have been called after unmounting');
-        t.ok(lifecycleSpies[key].onComplete.called, 'onComplete for observable \''+ key + '\' should have been called after unmounting');
-      });
-      
-      
-      Object.keys(lifecycleSpies).forEach(function (key) {
-         t.notOk(lifecycleSpies[key].onError.called, 'no error shouild have been reported for \''+ key + '\'');
-      });
-      
-      t.end();
+    
+    component.setProps(props);
+    
+    t.ok(lifecycleSpies.componentWillReceiveProps.onNext.calledWith(props), 'componentWillReceiveProps should have been called after setProps');
+    t.ok(lifecycleSpies.componentWillUpdate.onNext.called, 'componentWillUpdate should have been called after setProps');
+
+    var componentWillUpdateParameter = lifecycleSpies.componentWillUpdate.onNext.getCall(0).args[0];
+    t.deepEquals(componentWillUpdateParameter.nextProps, props, 'the componentWillUpdate observable should emit { nextProps, nextState }');
+    t.equals(componentWillUpdateParameter.nextState, state, 'the componentWillUpdate observable should emit { nextProps, nextState }');
+
+    t.ok(lifecycleSpies.componentDidUpdate.onNext.called, 'componentDidUpdate should have been called after setProps');
+    var componentDidUpdateParameter = lifecycleSpies.componentDidUpdate.onNext.getCall(0).args[0];
+    t.deepEquals(componentDidUpdateParameter.prevProps, {}, 'the componentDidUpdate observable should emit { prevProps, prevState }');
+    t.equals(componentDidUpdateParameter.prevState, state, 'the componentWillUpdate observable should emit { prevProps, prevState }');
+
+    Object.keys(lifecycleSpies).forEach(function (key) {
+       t.notOk(lifecycleSpies[key].onComplete.called, 'onComplete for observable \''+ key + '\' should not have been called yet');
     });
+
+    t.notOk(lifecycleSpies.componentWillUnmount.onNext.called, 'componentWillUnmount should not have been called yet');
+
+    testUtils.unmount();
+
+    Object.keys(lifecycleSpies).forEach(function (key) {
+      t.ok(lifecycleSpies.componentWillUnmount.onNext.called, 'componentWillUnmount should have been called after unmounting');
+      t.ok(lifecycleSpies[key].onComplete.called, 'onComplete for observable \''+ key + '\' should have been called after unmounting');
+    });
+
+
+    Object.keys(lifecycleSpies).forEach(function (key) {
+       t.notOk(lifecycleSpies[key].onError.called, 'no error shouild have been reported for \''+ key + '\'');
+    });
+
+    t.end();
   });
   
   
   t.test('teardown', function (t) {
     component = null;
-    delete global.document;
-    delete global.window;
     
     t.end();
   });

@@ -1,8 +1,7 @@
+var testUtils               = require('./testUtils');
 var test                    = require('tape');
 var React                   = require('react');
-var ReactTestUtils          = require('react/lib/ReactTestUtils');
 var StateStreamMixin        = require('../').StateStreamMixin;
-var jsdom                   = require('jsdom').jsdom;
 var Rx                      = require('rx');
 var sinon                   = require('sinon');
 
@@ -11,9 +10,6 @@ var sinon                   = require('sinon');
 test('StateStreamMixin', function (t) {
   
   t.test('setup', function (t) {
-    var doc = global.document = jsdom();
-    global.window = doc.parentWindow;
-    
     t.end();
   });
 
@@ -30,7 +26,7 @@ test('StateStreamMixin', function (t) {
     
     t.throws(
       function () {
-        ReactTestUtils.renderIntoDocument(React.createElement(Component));
+        testUtils.render(React.createElement(Component));
       }, 
       /Component use the StateStreamMixin it should provide a 'getStateStream' function/,
       'it should throw an error if getStateStream is not defined'
@@ -50,7 +46,7 @@ test('StateStreamMixin', function (t) {
     
     t.throws(
       function () {
-        ReactTestUtils.renderIntoDocument(React.createElement(Component));
+        testUtils.render(React.createElement(Component));
       }, 
       /'Component.getStateStream' should return an Rx.Observable, given : \[object Object\]/,
       'it should throw an error if getStateStream does not return an observable'
@@ -69,7 +65,7 @@ test('StateStreamMixin', function (t) {
     
     t.throws(
       function () {
-        ReactTestUtils.renderIntoDocument(React.createElement(Component));
+        testUtils.render(React.createElement(Component));
       }, 
       /The observable returned by 'Component.getStateStream' should publish Objects or null given : 1/,
       'it should throw an error if the Observable returned by getStateStream does not not resolve with an object or null'
@@ -93,7 +89,7 @@ test('StateStreamMixin', function (t) {
       }
     });
     
-    var component = ReactTestUtils.renderIntoDocument(React.createElement(Component));
+    var component = testUtils.render(React.createElement(Component));
     
     t.ok(getStateSteamSpy.called, 'it should have called getStateStreamSpy');
     
@@ -103,7 +99,7 @@ test('StateStreamMixin', function (t) {
     
     t.deepEquals(component.state, { foo: 'bar', hello: 'world'}, 'state should have been merged with the new value of stateStream');
     
-    component.unmountComponent();
+    testUtils.unmount();
     
     t.notOk(stateStream.hasObservers(), 'the subscrition to stateStream should have been cleaned after that the component has been unmounted ');
     
@@ -138,9 +134,6 @@ test('StateStreamMixin', function (t) {
   });
   
   t.test('teardown', function (t) {
-    delete global.document;
-    delete global.window;
-    
     t.end();
   });
 

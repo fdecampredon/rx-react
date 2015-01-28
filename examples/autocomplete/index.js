@@ -1,6 +1,7 @@
 /*global document*/
 
-var EventHandler = require('rx-react').EventHandler;
+var RxReact = require('rx-react');
+var FuncSubject = RxReact.FuncSubject;
 var React = require('react');
 var Rx    = require('rx-dom');
 
@@ -13,54 +14,40 @@ function searchWikipedia(term) {
 }
 
 
-
-var SearchWikipedia = React.createClass({
+class SearchWikipedia extends RxReact.Component {
+  constructor(props) {
+    super(props);
+    this.keyup = FuncSubject.create();
+  }
   
-  getInitialState: function () {
-    return {
-      results: []
-    };
-  },
-  componentWillMount: function () {
-    this.keyup = EventHandler.create();
-    
-    // Get all distinct key up events from the input and only fire if long enough and distinct
-    this.keyup
-    .map(function (e) {
-      return e.target.value;
-    })
-    .filter(function (text) {
-        return text.length > 2; // Only if the text is longer than 2 characters
-    })
-    .throttle(
-        750 // Pause for 750ms
-    )
-    .distinctUntilChanged()
-    .select(function (text) { 
-        return searchWikipedia(text); // Search wikipedia
-    })
-    .switchLatest()// Ensure no out of order results
-    .filter(function (data) {
-      return data.length === 2; 
-    })
-    .subscribe(function (results) {
-      this.setState({results: results[1]});
-    }.bind(this));
-  },
-  render: function () {
-    var results = this.state.results.map(function (result, index) {
-      return <li key={index}>{result}</li>;
-    });
+  getStateStream() {
+    return (
+      this.keyup
+      .map((e) => e.target.value)
+      .filter(text => text.length > 2)
+      .throttle(750)
+      .distinctUntilChanged()
+      .flatMapLatest(text => searchWikipedia(text))
+      .filter(data => data.length >= 2)
+      .map(results => ({results: results[1]}))
+    );
+  }
+  
+  render() {
+    var results = this.state && this.state.results || [];
     return (
       <div>
         <div>Start Typing</div>
         <input type="text" id="searchtext" onKeyUp={this.keyup}/>
-        <ul id="results">
-          {results}
-        </ul>
+        <ul id="results">{
+          results.map((result, index) => 
+            <li key={index}>{result}</li>
+          )
+        }</ul>
       </div>
     );
   }
-});
+}
+
 
 React.render(<SearchWikipedia />, document.getElementById('container'));

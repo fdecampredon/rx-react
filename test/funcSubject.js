@@ -1,8 +1,8 @@
 var test = require('tape');
-var EventHandler = require('../').EventHandler;
+var FuncSubject = require('../').FuncSubject;
 var Rx = require('rx');
 
-test('EventHandler', function (t) {
+test('FuncSubject', function (t) {
   t.plan(2);
   function hasAllProperties(objA, objB) {
     var key;
@@ -13,10 +13,10 @@ test('EventHandler', function (t) {
     }
     return true;
   }
-  t.ok(hasAllProperties(EventHandler.create(), Rx.Subject.prototype) ,'it should create an Rx Subject');
+  t.ok(hasAllProperties(FuncSubject.create(), Rx.Subject.prototype) ,'it should create an Rx Subject');
   
   var value = {};
-  var eventHandler = EventHandler.create();
+  var eventHandler = FuncSubject.create();
   
   eventHandler.subscribe(function (val) {
     t.equals(val, value, 'calling the handler as a function should invoque the \'onNext\' method ');
