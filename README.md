@@ -73,6 +73,10 @@ var Rx = require('rx');
 var Component = React.createClass({
   mixins: [LifecycleMixin],
   componentWillMount: function () {
+    this.lifecycle.componentWillMount.subscribe(function () {
+      console.log('componentWillMount');
+    });
+    
     this.lifecycle.componentDidMount.subscribe(function () {
       console.log('componentDidMount');
     });
