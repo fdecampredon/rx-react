@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "envify": "^3.2.0",
-    "react": "^0.13.beta.1",
+    "react": "^0.13.0-beta.1",
     "reactify": "^0.17.1",
     "rx": "^2.3.18",
     "rx-dom": "^4.0.1",
