@@ -129,6 +129,12 @@ test('StateStreamMixin', function (t) {
     
     t.equals(null, StateStreamMixin.getInitialState.call(fakeComponent), 
                  'if the stateStream does not resolve synchronously the getInitialState function should return null');
+
+    StateStreamMixin.componentDidMount.call(fakeComponent);
+
+    t.ok(typeof fakeComponent.__stateSubscription.dispose === 'function', 
+                 'subscribe to stateStream during componentDidMount cycle');
+
     fakeComponent.__stateSubscription.dispose();
     t.end();
   });
