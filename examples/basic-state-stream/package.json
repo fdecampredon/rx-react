@@ -6,9 +6,9 @@
     "build": "browserify --debug --transform reactify index.js > bundle.js"
   },
   "devDependencies": {
-    "react": "^0.12.1",
+    "react": "^0.13.0",
     "reactify": "^0.17.1",
     "rx": "^2.3.18",
-    "rx-react": "0.1.0"
+    "rx-react": "0.2.0"
   }
 }
