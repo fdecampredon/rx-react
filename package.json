@@ -39,7 +39,7 @@
   },
   "browser": {
     "./lib/waitForStream.js": "./lib/waitForStream-browser.js",
-    "./index.js": "browser.js"
+    "./index.js": "./browser.js"
   },
   "dependencies": {}
 }
