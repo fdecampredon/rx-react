@@ -26,16 +26,16 @@
   },
   "peerDependencies": {
     "react": "~0.13.0",
-    "rx": "^2.3.11"
+    "rx": "^3.0.0"
   },
   "devDependencies": {
-    "browserify": "^6.3.3",
+    "browserify": "^11.0.1",
     "jsdom": "^1.3.1",
     "react": "^0.13.0",
-    "reactify": "^0.17.1",
+    "reactify": "^1.1.1",
+    "rx": "^3.0.0",
     "sinon": "^1.12.1",
-    "tape": "^3.0.0",
-    "rx": "^2.3.11"
+    "tape": "^4.0.2"
   },
   "browser": {
     "./lib/waitForStream.js": "./lib/waitForStream-browser.js",
