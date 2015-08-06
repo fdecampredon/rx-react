@@ -1,1 +1,3 @@
 node_modules
+.brackets.json
+npm-debug.log

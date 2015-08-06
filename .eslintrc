@@ -1,0 +1,30 @@
+{
+  "plugins": [ "react" ],
+  "env": {
+    "node": true,
+    "es6": false,
+    "browser": true
+  },
+  "ecmaFeatures": {
+    "jsx": true
+  },
+  "rules": {
+    "quotes": [1, "single"],
+    "comma-dangle": [1, "never"],
+    "strict": [2, "global"],
+    "brace-style":  [2, "1tbs", { "allowSingleLine": false }],
+    "indent": [2,2],
+    "no-underscore-dangle": 0,
+    "no-unused-vars": 2,
+    "no-trailing-spaces": 0,
+    "camelcase": 0,
+    "no-alert": 0,
+    "no-shadow": 0,
+    "no-loop-func": 0,
+    "yoda": 0
+  },
+  "globals": {
+    "__DEV__": true,
+    "Promise": true
+  }
+}
