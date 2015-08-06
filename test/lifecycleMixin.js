@@ -1,8 +1,24 @@
-var testUtils               = require('./testUtils');
-var test                    = require('tape');
-var React                   = require('react');
-var LifecycleMixin          = require('../').LifecycleMixin;
-var sinon                   = require('sinon');
+//   Copyright 2014-2015 François de Campredon
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+'use strict';
+
+var testUtils = require('./testUtils');
+var test = require('tape');
+var React = require('react');
+var LifecycleMixin = require('../').LifecycleMixin;
+var sinon = require('sinon');
 
 
 test('LifecycleMixin', function (t) {
@@ -81,7 +97,7 @@ test('LifecycleMixin', function (t) {
     t.equals(componentDidUpdateParameter.prevState, state, 'the componentWillUpdate observable should emit { prevProps, prevState }');
 
     Object.keys(lifecycleSpies).forEach(function (key) {
-       t.notOk(lifecycleSpies[key].onComplete.called, 'onComplete for observable \''+ key + '\' should not have been called yet');
+      t.notOk(lifecycleSpies[key].onComplete.called, 'onComplete for observable \'' + key + '\' should not have been called yet');
     });
 
     t.notOk(lifecycleSpies.componentWillUnmount.onNext.called, 'componentWillUnmount should not have been called yet');
@@ -90,12 +106,12 @@ test('LifecycleMixin', function (t) {
 
     Object.keys(lifecycleSpies).forEach(function (key) {
       t.ok(lifecycleSpies.componentWillUnmount.onNext.called, 'componentWillUnmount should have been called after unmounting');
-      t.ok(lifecycleSpies[key].onComplete.called, 'onComplete for observable \''+ key + '\' should have been called after unmounting');
+      t.ok(lifecycleSpies[key].onComplete.called, 'onComplete for observable \'' + key + '\' should have been called after unmounting');
     });
 
 
     Object.keys(lifecycleSpies).forEach(function (key) {
-       t.notOk(lifecycleSpies[key].onError.called, 'no error shouild have been reported for \''+ key + '\'');
+      t.notOk(lifecycleSpies[key].onError.called, 'no error shouild have been reported for \'' + key + '\'');
     });
 
     t.end();

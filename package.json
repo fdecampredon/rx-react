@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "tape test/testUtils.js test/*.js | faucet",
-    "lint": "eslint *.js"
+    "lint": "eslint **/*.js"
   },
   "keywords": [
     "rx",
