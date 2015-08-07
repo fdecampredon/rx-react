@@ -19,5 +19,6 @@ module.exports = {
   LifecycleMixin: require('./lib/lifecycleMixin'),
   StateStreamMixin: require('./lib/stateStreamMixin').StateStreamMixin,
   PropsMixin: require('./lib/propsMixin'),
-  FuncSubject: require('./lib/funcSubject')
+  FuncSubject: require('./lib/funcSubject'),
+  createClass: require('./lib/createClass')
 };
