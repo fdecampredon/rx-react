@@ -122,33 +122,6 @@ test('StateStreamMixin', function (t) {
     t.end();
   });
   
-  
-  t.test('initialState', function (t) {
-    var stateStream = Rx.Observable.of({ foo: 'bar'});
-    
-    var fakeComponent = {
-      setState: sinon.spy(),
-      getStateStream: function () {
-        return stateStream;
-      }
-    };
-    
-    t.deepEquals({ foo: 'bar'}, StateStreamMixin.getInitialState.call(fakeComponent), 
-                 'if the stateStream resolve synchronously the getInitialState function should return the value of the stream');
-    
-    t.notOk(fakeComponent.setState.called, 'the setState Method should not have been called during the getInitialState execution');
-    
-    stateStream = Rx.Observable.interval(1000).map(function () {
-      return {};
-    });
-    
-    
-    t.equals(null, StateStreamMixin.getInitialState.call(fakeComponent), 
-                 'if the stateStream does not resolve synchronously the getInitialState function should return null');
-    fakeComponent.__stateSubscription.dispose();
-    t.end();
-  });
-  
   t.test('teardown', function (t) {
     t.end();
   });

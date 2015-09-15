@@ -17,19 +17,13 @@
 var jsdom = require('jsdom').jsdom;
 
 var doc = global.document = jsdom();
-global.window = doc.parentWindow;
-global.window.document = doc;
+global.window = doc.defaultView;
 global.navigator = {
   userAgent: 'Chrome'
 };
 console.debug = console.log;
 
 var React = require('react');
-
-
-
-
-
 var div = doc.createElement('div');
 
 
