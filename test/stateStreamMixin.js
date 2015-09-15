@@ -18,6 +18,7 @@ var testUtils = require('./testUtils');
 var test = require('tape');
 var React = require('react');
 var StateStreamMixin = require('../').StateStreamMixin;
+var cleanAllSubscriptions = require('../').cleanAllSubscriptions;
 var Rx = require('rx');
 var sinon = require('sinon');
 
@@ -122,8 +123,26 @@ test('StateStreamMixin', function (t) {
     t.end();
   });
   
-  t.test('teardown', function (t) {
+  t.test('cleanAllSubscriptions', function (t) {
+    var stateStream = new Rx.BehaviorSubject({ foo: 'bar'});
+    var Component = React.createClass({
+      displayName: 'Component',
+      mixins: [StateStreamMixin],
+      getStateStream: function () {
+        return stateStream;
+      },
+      render: function () {
+        return null;
+      }
+    });
+    
+    var component = testUtils.render(React.createElement(Component));
+    cleanAllSubscriptions();
+    stateStream.onNext({ hello: 'world'});
+    t.deepEquals(component.state, { foo: 'bar'}, 'the state should not been bound anymore to stateStream after a call to `cleanAllSubscriptions`');
+    t.notOk(stateStream.hasObservers(), 'the subscrition to stateStream should have been cleaned after a call tp `cleanAllSubscriptions` ');
     t.end();
   });
+  
 
 });
