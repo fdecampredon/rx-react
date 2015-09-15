@@ -23,16 +23,13 @@ global.navigator = {
 };
 console.debug = console.log;
 
-var React = require('react');
+var ReactDOM = require('react-dom');
 var div = doc.createElement('div');
 
-
 exports.render = function (component) {
-  return React.render(component, div);
+  return ReactDOM.render(component, div);
 };
 
-
-
 exports.unmount = function () {
-  return React.unmountComponentAtNode(div);
+  return ReactDOM.unmountComponentAtNode(div);
 };
