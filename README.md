@@ -128,7 +128,7 @@ This is particulary useful in combination with the `StateStreamMixin` when your 
 
 ##Component
 
-The `RxReact.Component` is a base class combining the behavior of all the mixin described above.
+The `RxReact.Component` is a base class combining the behavior of the `PropsStreamMixin` and the `StateStreamMixin`.
 It extends `React.Component`.
 Example: 
 
@@ -153,8 +153,10 @@ class MyComponent extends RxReact.Component {
   }
 }
 ```
-Note that the `getStateStream` function is mandatory, and that when you extend lifecycle methods,
-You must call the `super` method.
+Note that when you extend lifecycle methods: `componentWillMount` `componentWillReceiveProps` and `componentWillUnMount`, You must call the `super` method.
+
+> Before the 0.3.x versions `RxReact.Component` also implemented lifecyle mixin behavior, for some perf reasons and because most of the time it's unnecessary thoses behavior has been removed. 
+> If you want reenable this behavior  use `FuncSubject` as lifecycle method, or manually apply the `LifecycleMixin` on your class.
 
 ##FuncSubject
 
@@ -185,4 +187,38 @@ var Button = React.createClass({
     return <button onClick={this.buttonClicked} />
   }
 });
+```
+
+`FuncSubject` also accept a function as argument,  if provided this funtion will be used to map the value of each elements.
+This function will *always* be called even if the `FuncSubject` has no subscription.
+
+```javascript
+var FuncSubject = require('rx-react').FuncSubject;
+var React = require('react');
+var Rx = require('rx');
+
+
+var MyComponent = React.createClass({
+  componentWillMount: function () {
+    this.inputValue = FuncSubject.create(function (event) {
+      return event.target.value
+    });
+    
+    this.inputValue.subscribe(function (value) {
+      alert('inputValue changed :' + value);
+    })
+  },
+  render: function() {
+    return <input onChange={this.inputValue} />
+  }
+});
+```
+
+### FunctSubject.behavior
+
+You can also create a `FuncSubject` that extends [`BehaviorSubject`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/subjects/behaviorsubject.md). simply use the `behavior` function exposed by `FuncSubject`: 
+
+
+```javascript
+var myHandler = FuncSubject.behavior(intialValue, mapFunction)
 ```
