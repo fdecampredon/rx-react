@@ -82,7 +82,7 @@ test('LifecycleMixin', function (t) {
     
     var props = { prop: { foo: 'bar'} };
     
-    component.setProps(props);
+    testUtils.render(React.createElement(Component, props));
     
     t.ok(lifecycleSpies.componentWillReceiveProps.onNext.calledWith(props), 'componentWillReceiveProps should have been called after setProps');
     t.ok(lifecycleSpies.componentWillUpdate.onNext.called, 'componentWillUpdate should have been called after setProps');
