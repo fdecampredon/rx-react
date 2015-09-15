@@ -21,7 +21,9 @@
     "no-alert": 0,
     "no-shadow": 0,
     "no-loop-func": 0,
-    "yoda": 0
+    "yoda": 0,
+    "no-proto": 0,
+    "no-constant-condition": 0
   },
   "globals": {
     "__DEV__": true,
