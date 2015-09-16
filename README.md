@@ -146,7 +146,7 @@ class MyComponent extends RxReact.Component {
   }
   
   render() {
-    var secondsElapsed = this.state? this.state.secondsElapsed : 0;
+    var secondsElapsed = this.state ? this.state.secondsElapsed : 0;
     return (
       <div>Seconds Elapsed: {secondsElapsed}</div>
     );
@@ -214,7 +214,7 @@ var MyComponent = React.createClass({
 });
 ```
 
-### FunctSubject.behavior
+### FuncSubject.behavior
 
 You can also create a `FuncSubject` that extends [`BehaviorSubject`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/subjects/behaviorsubject.md). simply use the `behavior` function exposed by `FuncSubject`: 
 
