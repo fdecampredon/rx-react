@@ -1,9 +1,9 @@
-#RxReact
+# RxReact
 
 >  [ReactJS](http://facebook.github.io/react/) bindings for [RxJS](https://github.com/Reactive-Extensions/RxJS)
 
 
-#Installation
+# Installation
 
 Install this module with npm: 
 
@@ -11,7 +11,7 @@ Install this module with npm:
 npm install rx-react
 ```
 
-#Usage: 
+# Usage: 
 
 RxReact provides a set of utilities to work with RxJS and React : 
 
@@ -23,7 +23,7 @@ RxReact provides a set of utilities to work with RxJS and React :
 
 
 
-##StateStreamMixin
+## StateStreamMixin
 
 The `StateStreamMixin` allows to bind a component state to an RxJS `Observable` stream. 
 The way to achieve the binding is to provide a `getStateStream` method on your component that returns an RxJS `Observable`, the `StateStream` mixin will automatically merge the state of your component with the values published by the returned observable. The subscription will be automaticly cleaned on component unmount.
@@ -57,7 +57,7 @@ React.render(<Timer />, document.getElementById('timer-holder'));
 ```
 
 
-##LifecycleMixin
+## LifecycleMixin
 
 The `LifecycleMixin` allows you to consume React components lifecycle events as RxJS `Observable`.
 The `LifecycleMixin` will inject a property `lifecycle` to the component, that property contains an observable for each lifecycle events.
@@ -98,7 +98,7 @@ var Component = React.createClass({
 });
 ```
 
-##PropsMixin
+## PropsMixin
 
 The `PropsMixin` allows to obtain a stream of props as RxJS `Observable` for your component.
 Example : 
@@ -126,7 +126,7 @@ comp.setProps({message: 'Hello John'}); // log 'Hello John'
 This is particulary useful in combination with the `StateStreamMixin` when your component states depends on Props.
 
 
-##Component
+## Component
 
 The `RxReact.Component` is a base class combining the behavior of the `PropsStreamMixin` and the `StateStreamMixin`.
 It extends `React.Component`.
@@ -158,7 +158,7 @@ Note that when you extend lifecycle methods: `componentWillMount` `componentWill
 > Before the 0.3.x versions `RxReact.Component` also implemented lifecyle mixin behavior, for some perf reasons and because most of the time it's unnecessary thoses behavior has been removed. 
 > If you want reenable this behavior  use `FuncSubject` as lifecycle method, or manually apply the `LifecycleMixin` on your class.
 
-##FuncSubject
+## FuncSubject
 
 The `FuncSubject` helper allows to create an RxJS `Observable` that can be injected as callback for React event handlers, refs, etc...
 To create an handler use the `create` function of `FuncSubject`
