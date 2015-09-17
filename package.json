@@ -37,5 +37,7 @@
     "sinon": "^1.16.1",
     "tape": "^4.2.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "fbjs": "^0.2.1"
+  }
 }
