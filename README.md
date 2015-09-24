@@ -155,7 +155,7 @@ class MyComponent extends RxReact.Component {
 ```
 Note that when you extend lifecycle methods: `componentWillMount` `componentWillReceiveProps` and `componentWillUnMount`, You must call the `super` method.
 
-> Before the 0.3.x versions `RxReact.Component` also implemented lifecyle mixin behavior, for some perf reasons and because most of the time it's unnecessary thoses behavior has been removed. 
+> Before the 0.3.x versions `RxReact.Component` also implemented lifecyle mixin behavior, for some perf reasons and because most of the time it's unnecessary this has been removed. 
 > If you want reenable this behavior  use `FuncSubject` as lifecycle method, or manually apply the `LifecycleMixin` on your class.
 
 ## FuncSubject
