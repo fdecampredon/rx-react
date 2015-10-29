@@ -74,8 +74,8 @@ test('FuncSubject', function (t) {
     
     var eventHandler = FuncSubject.create(spy);
     
-    eventHandler(value);
-    t.ok(spy.called, 'it should call the map function event if the observable holds no subscription');
+    eventHandler(value, value2);
+    t.ok(spy.calledWithExactly(value, value2), 'it should call the map function event if the observable holds no subscription');
     
     eventHandler.subscribe(function (val) {
       t.equals(val, value2, 'calling the handler as a function should invoque the \'onNext\' method with mapped value');
