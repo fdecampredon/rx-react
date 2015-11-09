@@ -1,11 +1,19 @@
-#v0.3
+#v0.3.0
 
 - Remove Deprecated EventHandler
-- Introduce `FuncSubject.behavior'
 - Components do not implements `LifecycleMixin` behavior anymore
 - StateStream mixin is now initialized in `componentWillMount` (previously done in `getInitialState`)
 - new top level method `cleanAllSubscriptions`
-- React.Component methods are not enumerable anymore
+- RxReact.Component 
+ - methods are not enumerable anymore
+ - empty function on unused lifecycle methods for consitency
+- FuncSubject:
+ - new map function
+ - `FuncSubject.behavior`
+ - `FuncSubject.replay`
+ - `FuncSubject.async`
+ - `FuncSubject.factory`
+
 
 #v0.2
 
