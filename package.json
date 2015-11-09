@@ -1,6 +1,6 @@
 {
   "name": "rx-react",
-  "version": "0.3.0-beta3",
+  "version": "0.3.0",
   "description": "ReactJS bindings for RxJS",
   "main": "index.js",
   "scripts": {
