@@ -153,7 +153,7 @@ class MyComponent extends RxReact.Component {
   }
 }
 ```
-Note that when you extend lifecycle methods: `componentWillMount` `componentWillReceiveProps` and `componentWillUnMount`, You must call the `super` method.
+Note that when you extend lifecycle methods, you must call the `super` method.
 
 > Before the 0.3.x versions `RxReact.Component` also implemented lifecyle mixin behavior, for some perf reasons and because most of the time it's unnecessary this has been removed. 
 > If you want reenable this behavior  use `FuncSubject` as lifecycle method, or manually apply the `LifecycleMixin` on your class.
@@ -220,5 +220,33 @@ You can also create a `FuncSubject` that extends [`BehaviorSubject`](https://git
 
 
 ```javascript
-var myHandler = FuncSubject.behavior(intialValue, mapFunction)
+var subject = FuncSubject.behavior(intialValue, mapFunction)
+```
+
+
+### FuncSubject.async
+
+You can also create a `FuncSubject` that extends [`AsyncSubject`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/subjects/asyncsubject.md). simply use the `async` function exposed by `FuncSubject`: 
+
+
+```javascript
+var subject = FuncSubject.async(mapFunction)
+```
+
+### FuncSubject.replay
+
+You can also create a `FuncSubject` that extends [`ReplaySubject`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/subjects/replaysubject.md). simply use the `replay` function exposed by `FuncSubject`: 
+
+
+```javascript
+var subject = FuncSubject.replay(bufferSize, mapFunction)
+```
+
+### FuncSubject.replay
+
+You can create a `FuncSubject` from any subject base class using the `factory` function expsed by `FuncSubject`: 
+
+
+```javascript
+var subject = FuncSubject.factory(SubjectClass, mapFunction, ...constructorArgs);
 ```
