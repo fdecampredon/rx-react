@@ -23,7 +23,7 @@
   "author": "François de Campredon <francois.de.campredon@gmail.com>",
   "licenses": "Apache-2.0",
   "peerDependencies": {
-    "react": "^0.14.0",
+    "react": ">=0.14.0",
     "rx": "*"
   },
   "devDependencies": {
