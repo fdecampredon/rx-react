@@ -38,6 +38,7 @@
     "tape": "^4.2.0"
   },
   "dependencies": {
-    "fbjs": "^0.2.1"
+    "fbjs": "^0.2.1",
+    "object-assign": "^4.0.1"
   }
 }
