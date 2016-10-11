@@ -18,7 +18,7 @@ var testUtils = require('./testUtils');
 var test = require('tape');
 var React = require('react');
 var Rx = require('rx');
-var assign = require('react/lib/Object.assign');
+var assign = require('object-assign');
 var RxReactComponent = require('../').Component;
 var sinon = require('sinon');
 

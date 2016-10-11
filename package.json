@@ -23,21 +23,22 @@
   "author": "François de Campredon <francois.de.campredon@gmail.com>",
   "licenses": "Apache-2.0",
   "peerDependencies": {
-    "react": ">=0.14.0",
+    "react": "*",
     "rx": "*"
   },
   "devDependencies": {
-    "eslint": "^1.4.1",
-    "eslint-plugin-react": "^3.3.2",
+    "eslint": "*",
+    "eslint-plugin-react": "*",
     "faucet": "0.0.1",
-    "jsdom": "^6.5.0",
-    "react": "^0.14.0",
-    "react-dom": "^0.14.0",
+    "jsdom": "*",
+    "react": "*",
+    "react-dom": "*",
     "rx": "*",
     "sinon": "^1.16.1",
     "tape": "^4.2.0"
   },
   "dependencies": {
-    "fbjs": "^0.2.1"
+    "fbjs": "*",
+    "object-assign": "^4.1.0"
   }
 }
